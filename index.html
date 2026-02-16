@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,500&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-rose: #2e1a1a;
+            --dusty-pink: #d4a3a3;
+            --soft-white: #fdfaf6;
+            --overlay: rgba(255, 255, 255, 0.03);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--deep-rose);
+            color: var(--soft-white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Ambient Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #422828 0%, #1a0f0f 100%);
+            z-index: -1;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            padding: 60px 40px;
+            background: var(--overlay);
+            border-radius: 40px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 163, 163, 0.1);
+        }
+
+        .slide {
+            display: none;
+            min-height: 250px;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeIn 2s ease-in;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 1.8rem;
+            color: var(--dusty-pink);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .message-body {
+            font-size: 1.15rem;
+            line-height: 2;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            min-height: 120px;
+        }
+
+        .controls {
+            margin-top: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: var(--dusty-pink);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: all 0.5s;
+            opacity: 0.6;
+        }
+
+        .nav-btn:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0;
+            cursor: default;
+        }
+
+        .progress-bar {
+            height: 1px;
+            background: rgba(212, 163, 163, 0.2);
+            flex-grow: 1;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .progress-inner {
+            height: 100%;
+            background: var(--dusty-pink);
+            width: 0%;
+            transition: width 0.8s ease;
+        }
+
+        .final-message {
+            margin-top: 40px;
+            font-style: italic;
+            color: var(--dusty-pink);
+            font-size: 0.9rem;
+            border: 1px solid rgba(212, 163, 163, 0.3);
+            padding: 20px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        #hint {
+            position: fixed;
+            bottom: 30px;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            opacity: 0.4;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="ambient-bg"></div>
+
+<audio id="raindance" loop>
+    <source src="raindance.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+    <div id="slides-container">
+        <div class="slide active" data-title="A moment of quiet">
+            <h1>A moment of quiet</h1>
+            <div class="message-body">I wanted to create a space just for us. Away from the noise of the world and away from the mistakes of the past week. Please take your time with this.</div>
+        </div>
+
+        <div class="slide" data-title="My sincere regret">
+            <h1>My sincere regret</h1>
+            <div class="message-body">Last week I wasn't the man you deserve. I allowed myself to become distant and unavailable. I let the pressure of my own life cloud the vision of what truly matters.</div>
+        </div>
+
+        <div class="slide" data-title="The weight of silence">
+            <h1>The weight of silence</h1>
+            <div class="message-body">I know that my silence felt like indifference. I know that being unavailable made you feel like you weren't my priority. That realization is a weight I have been carrying since.</div>
+        </div>
+
+        <div class="slide" data-title="Valentine’s Day">
+            <h1>Valentine’s Day</h1>
+            <div class="message-body">Missing that day was my biggest failure. It was a day meant for us to celebrate the beautiful connection we share. Instead, I left you with an empty space where a celebration should have been.</div>
+        </div>
+
+        <div class="slide" data-title="Beyond the day">
+            <h1>Beyond the day</h1>
+            <div class="message-body">It wasn't just about a holiday or a date. It was about the fact that you deserve to feel seen and cherished every single day. I failed to show you that, and for that, I am deeply sorry.</div>
+        </div>
+
+        <div class="slide" data-title="What I see in you">
+            <h1>What I see in you</h1>
+            <div class="message-body">You are the person who brings light into my most difficult days. You are patient, you are kind, and you have a heart that deserves nothing less than my full attention and devotion.</div>
+        </div>
+
+        <div class="slide" data-title="My promise to us">
+            <h1>My promise to us</h1>
+            <div class="message-body">I am committing myself to being more present. I am learning how to balance the world without letting it take me away from you. Our relationship is the most important thing I have.</div>
+        </div>
+
+        <div class="slide" data-title="Rebuilding together">
+            <h1>Rebuilding together</h1>
+            <div class="message-body">I don't expect things to be perfect overnight, but I am here to do the work. I want to earn back the smile that I haven't seen enough of lately. I want to be your safe place again.</div>
+        </div>
+
+        <div class="slide" data-title="My heart is open">
+            <h1>My heart is open</h1>
+            <div class="message-body">I am waiting here with all the love I have. Whenever you feel ready to talk, I am ready to listen. There is no rush. Your peace is more important than my desire for an answer.</div>
+            <div class="final-message">I am here whenever your heart is ready</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="nav-btn" id="prevBtn" onclick="moveSlide(-1)" disabled>Previous</button>
+        <div class="progress-bar"><div class="progress-inner" id="progress"></div></div>
+        <button class="nav-btn" id="nextBtn" onclick="moveSlide(1)">Next</button>
+    </div>
+</div>
+
+<div id="hint">Tap anywhere to listen to the music</div>
+
+<script>
+    let currentIdx = 0;
+    const slides = document.querySelectorAll('.slide');
+    const progress = document.getElementById('progress');
+    const music = document.getElementById('raindance');
+
+    document.body.addEventListener('click', () => {
+        music.volume = 0.2;
+        music.play();
+        document.getElementById('hint').style.display = 'none';
+    }, { once: true });
+
+    function moveSlide(step) {
+        slides[currentIdx].classList.remove('active');
+        currentIdx += step;
+        slides[currentIdx].classList.add('active');
+        
+        // Update Progress
+        const percent = (currentIdx / (slides.length - 1)) * 100;
+        progress.style.width = percent + '%';
+
+        // Update Buttons
+        document.getElementById('prevBtn').disabled = currentIdx === 0;
+        document.getElementById('nextBtn').disabled = currentIdx === slides.length - 1;
+        
+        if(currentIdx === slides.length - 1) {
+            document.getElementById('nextBtn').innerText = "Fin";
+        } else {
+            document.getElementById('nextBtn').innerText = "Next";
+        }
+    }
+
+    // Initialize progress bar
+    progress.style.width = '0%';
+</script>
+
+</body>
+</html>
