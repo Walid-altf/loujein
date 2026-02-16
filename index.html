@@ -220,13 +220,25 @@
     const progress = document.getElementById('progress');
     const music = document.getElementById('raindance');
 
-    document.body.addEventListener('click', () => {
-        music.volume = 0.2;
-        music.play();
-        document.getElementById('hint').style.display = 'none';
-    }, { once: true });
+    // This function forces the music to play
+    function playMusic() {
+        if (music.paused) {
+            music.volume = 0.25;
+            music.play().catch(error => {
+                console.log("Autoplay prevented, waiting for interaction.");
+            });
+            document.getElementById('hint').style.opacity = '0';
+        }
+    }
+
+    // Listen for any touch or click on the entire screen
+    document.addEventListener('click', playMusic, { once: true });
+    document.addEventListener('touchstart', playMusic, { once: true });
 
     function moveSlide(step) {
+        // Also try playing music when they hit "Next" just in case
+        playMusic();
+
         slides[currentIdx].classList.remove('active');
         currentIdx += step;
         slides[currentIdx].classList.add('active');
@@ -245,10 +257,8 @@
             document.getElementById('nextBtn').innerText = "Next";
         }
     }
-
-    // Initialize progress bar
-    progress.style.width = '0%';
 </script>
 
 </body>
+
 </html>
