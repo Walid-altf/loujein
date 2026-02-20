@@ -26,7 +26,6 @@
             overflow: hidden;
         }
 
-        /* Ambient Background */
         .ambient-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -35,7 +34,7 @@
         }
 
         .container {
-            width: 80%;
+            width: 85%;
             max-width: 600px;
             text-align: center;
             padding: 60px 40px;
@@ -96,7 +95,7 @@
             opacity: 0.6;
         }
 
-        .nav-btn:hover {
+        .nav-btn:hover:not(:disabled) {
             opacity: 1;
             transform: scale(1.05);
         }
@@ -142,9 +141,11 @@
             bottom: 30px;
             font-size: 0.7rem;
             letter-spacing: 2px;
-            opacity: 0.4;
+            opacity: 0.5;
             width: 100%;
             text-align: center;
+            transition: opacity 0.5s;
+            pointer-events: none;
         }
     </style>
 </head>
@@ -152,53 +153,53 @@
 
 <div class="ambient-bg"></div>
 
-<audio id="raindance" loop>
-    <source src="raindance.mp3" type="audio/mpeg">
+<audio id="raindance" loop preload="auto">
+    <source src="./raindance.mp3" type="audio/mpeg">
 </audio>
 
 <div class="container">
     <div id="slides-container">
-        <div class="slide active" data-title="A moment of quiet">
+        <div class="slide active">
             <h1>A moment of quiet</h1>
             <div class="message-body">I wanted to create a space just for us. Away from the noise of the world and away from the mistakes of the past week. Please take your time with this.</div>
         </div>
 
-        <div class="slide" data-title="My sincere regret">
+        <div class="slide">
             <h1>My sincere regret</h1>
             <div class="message-body">Last week I wasn't the man you deserve. I allowed myself to become distant and unavailable. I let the pressure of my own life cloud the vision of what truly matters.</div>
         </div>
 
-        <div class="slide" data-title="The weight of silence">
+        <div class="slide">
             <h1>The weight of silence</h1>
             <div class="message-body">I know that my silence felt like indifference. I know that being unavailable made you feel like you weren't my priority. That realization is a weight I have been carrying since.</div>
         </div>
 
-        <div class="slide" data-title="Valentine’s Day">
+        <div class="slide">
             <h1>Valentine’s Day</h1>
             <div class="message-body">Missing that day was my biggest failure. It was a day meant for us to celebrate the beautiful connection we share. Instead, I left you with an empty space where a celebration should have been.</div>
         </div>
 
-        <div class="slide" data-title="Beyond the day">
+        <div class="slide">
             <h1>Beyond the day</h1>
             <div class="message-body">It wasn't just about a holiday or a date. It was about the fact that you deserve to feel seen and cherished every single day. I failed to show you that, and for that, I am deeply sorry.</div>
         </div>
 
-        <div class="slide" data-title="What I see in you">
+        <div class="slide">
             <h1>What I see in you</h1>
             <div class="message-body">You are the person who brings light into my most difficult days. You are patient, you are kind, and you have a heart that deserves nothing less than my full attention and devotion.</div>
         </div>
 
-        <div class="slide" data-title="My promise to us">
+        <div class="slide">
             <h1>My promise to us</h1>
             <div class="message-body">I am committing myself to being more present. I am learning how to balance the world without letting it take me away from you. Our relationship is the most important thing I have.</div>
         </div>
 
-        <div class="slide" data-title="Rebuilding together">
+        <div class="slide">
             <h1>Rebuilding together</h1>
             <div class="message-body">I don't expect things to be perfect overnight, but I am here to do the work. I want to earn back the smile that I haven't seen enough of lately. I want to be your safe place again.</div>
         </div>
 
-        <div class="slide" data-title="My heart is open">
+        <div class="slide">
             <h1>My heart is open</h1>
             <div class="message-body">I am waiting here with all the love I have. Whenever you feel ready to talk, I am ready to listen. There is no rush. Your peace is more important than my desire for an answer.</div>
             <div class="final-message">I am here whenever your heart is ready</div>
@@ -219,12 +220,19 @@
     const slides = document.querySelectorAll('.slide');
     const progress = document.getElementById('progress');
     const music = document.getElementById('raindance');
+    const hint = document.getElementById('hint');
 
-    document.body.addEventListener('click', () => {
+    // Function to handle audio play on first interaction
+    function startExperience() {
         music.volume = 0.2;
-        music.play();
-        document.getElementById('hint').style.display = 'none';
-    }, { once: true });
+        music.play().then(() => {
+            hint.style.opacity = '0';
+        }).catch(e => console.log("Audio waiting for interaction"));
+    }
+
+    // Add listeners for both mobile touch and desktop click
+    document.body.addEventListener('click', startExperience, { once: true });
+    document.body.addEventListener('touchstart', startExperience, { once: true });
 
     function moveSlide(step) {
         slides[currentIdx].classList.remove('active');
@@ -237,12 +245,14 @@
 
         // Update Buttons
         document.getElementById('prevBtn').disabled = currentIdx === 0;
-        document.getElementById('nextBtn').disabled = currentIdx === slides.length - 1;
         
-        if(currentIdx === slides.length - 1) {
-            document.getElementById('nextBtn').innerText = "Fin";
+        // On the last slide, hide the next button instead of just disabling it
+        const nextBtn = document.getElementById('nextBtn');
+        if (currentIdx === slides.length - 1) {
+            nextBtn.style.visibility = 'hidden';
         } else {
-            document.getElementById('nextBtn').innerText = "Next";
+            nextBtn.style.visibility = 'visible';
+            nextBtn.innerText = "Next";
         }
     }
 
